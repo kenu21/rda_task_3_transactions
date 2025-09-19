@@ -23,7 +23,7 @@ CREATE TABLE Customers (
 
 CREATE TABLE Orders (
     ID INT AUTO_INCREMENT,
-    CustomerID INT, 
+    CustomerID INT NULL, 
     FOREIGN KEY (CustomerID) REFERENCES Customers(ID) ON DELETE SET NULL,
     Date DATE,
     PRIMARY KEY (ID)
@@ -31,9 +31,9 @@ CREATE TABLE Orders (
 
 CREATE TABLE OrderItems (
     ID INT AUTO_INCREMENT,
-    OrderID INT, 
+    OrderID INT NULL, 
     FOREIGN KEY (OrderID) REFERENCES Orders(ID) ON DELETE SET NULL,
-	ProductID INT, 
+	ProductID INT NULL, 
     Count INT,
     FOREIGN KEY (ProductID) REFERENCES Products(ID) ON DELETE SET NULL,
     PRIMARY KEY (ID)
@@ -55,9 +55,8 @@ UPDATE Products
  SET WarehouseAmount = WarehouseAmount - 1
  WHERE ID = 1 AND WarehouseAmount >= 1;
 
-IF ROW_COUNT() = 0 THEN
-	ROLLBACK;
-    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Product not found';
-END IF;
+SELECT CASE WHEN ROW_COUNT() = 0 THEN
+    ROLLBACK
+END;
 
 COMMIT;
