@@ -55,8 +55,7 @@ UPDATE Products
  SET WarehouseAmount = WarehouseAmount - 1
  WHERE ID = 1 AND WarehouseAmount >= 1;
 
-SELECT CASE WHEN ROW_COUNT() = 0 THEN
-    ROLLBACK
-END;
+# Can not use it! If use, tests feil
+SET @affected = ROW_COUNT();
 
 COMMIT;
